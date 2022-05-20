@@ -64,6 +64,9 @@ describe("MOVEZ", function () {
     movez = await (upgrades.deployProxy(MOVEZ, [feeEcoPct, feeEcoAddress, feeFundPct, feeFundAddress, router.address], {initializer: 'initialize'})) as MOVEZ;
     await movez.deployed();
 
+    // lets mint some tokens to the owner
+    await movez.mint(owner.address, tokens("100000"));
+
     await owner.sendTransaction({
       to: weth.address,
       value: ether("500")
@@ -87,12 +90,14 @@ describe("MOVEZ", function () {
     let amountsMax = [tokens("10000")];
     const whitelistAddresses: string[] = [trader1.address, trader2.address]
     
-    await movez.createLGEWhitelist(pair.address, durations, amountsMax);
+    await movez.createLGEWhitelist(router.address, durations, amountsMax);
     await movez.modifyLGEWhitelist(0, 1200, tokens("10000"), whitelistAddresses, true);
 
-    await movez.approve(router.address, tokens("100000"));
-    await weth.approve(router.address, ether("200"));
-    // await router.addLiquidity(movez.address, weth.address, tokens("100000"), ether("200"), 0, 0, owner.address, deadline(oneMinute*30));
+    // await movez.setExcluded([owner.address, router.address], false);
+
+    await movez.connect(owner).approve(router.address, tokens("100000"));
+    await weth.connect(owner).approve(router.address, ether("200"));
+    await router.connect(owner).addLiquidity(movez.address, weth.address, tokens("100"), ether("20"), 0, 0, owner.address, deadline(oneMinute*30));
 
     // Just a thought, try to make multiple snapshots
     await snapshot.snapshot();
@@ -104,8 +109,16 @@ describe("MOVEZ", function () {
 
   describe("Deployment", () => {
 
-    it("Should return the new greeting once it's changed", async function () {
+    it("Should be named MOVEZ.me", async function () {
       expect(await movez.name()).equal("MOVEZ.me");
+    });
+
+    it("Should have 18 decimals", async function () {
+      expect(await movez.decimals()).equal(18);
+    });
+
+    it("Should have MOVEZ as the symbol", async function () {
+      expect(await movez.symbol()).equal("MOVEZ");
     });
 
   });
