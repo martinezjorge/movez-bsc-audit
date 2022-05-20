@@ -6,6 +6,8 @@ import "@nomiclabs/hardhat-waffle";
 import "@typechain/hardhat";
 import "hardhat-gas-reporter";
 import "solidity-coverage";
+import "hardhat-dependency-compiler";
+import "@openzeppelin/hardhat-upgrades";
 
 dotenv.config();
 
@@ -23,7 +25,46 @@ task("accounts", "Prints the list of accounts", async (taskArgs, hre) => {
 // Go to https://hardhat.org/config/ to learn more
 
 const config: HardhatUserConfig = {
-  solidity: "0.8.4",
+  solidity: {
+    compilers: [
+        {
+            version: "0.6.12",
+            settings: {
+                optimizer: {
+                    enabled: true,
+                    runs: 200
+                }
+            }
+        },
+        {
+            version: "0.5.16",
+            settings: {
+                optimizer: {
+                    enabled: true,
+                    runs: 200
+                }
+            }
+        },
+        {
+            version: "0.6.6",
+            settings: {
+                optimizer: {
+                    enabled: true,
+                    runs: 200
+                }
+            }
+        },
+        {
+            version: "0.4.18",
+            settings: {
+                optimizer: {
+                    enabled: true,
+                    runs: 200
+                }
+            }
+        }
+    ],
+},
   networks: {
     ropsten: {
       url: process.env.ROPSTEN_URL || "",
@@ -38,6 +79,13 @@ const config: HardhatUserConfig = {
   etherscan: {
     apiKey: process.env.ETHERSCAN_API_KEY,
   },
+  dependencyCompiler: {
+      paths: [
+          '@uniswap/v2-periphery/contracts/UniswapV2Router02.sol',
+          '@uniswap/v2-core/contracts/UniswapV2Factory.sol',
+          '@uniswap/v2-core/contracts/UniswapV2Pair.sol',
+      ],
+  }
 };
 
 export default config;
