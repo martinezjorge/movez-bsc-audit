@@ -250,7 +250,7 @@ describe("MOVEZ", () => {
       await expect(movez.connect(trader3).transfer(trader1.address, tokens("10")))
         .revertedWith("ERC20: transfer excluded");
       // unexcluded can transfer to unexcluded
-      console.log(ethers.utils.formatUnits(await movez.balanceOf(trader3.address), 18));
+      // console.log(ethers.utils.formatUnits(await movez.balanceOf(trader3.address), 18));
       await movez.connect(trader3).transfer(trader4.address, tokens("10"));
       expect(await movez.balanceOf(trader3.address)).equal(tokens("90"));
       expect(await movez.balanceOf(trader4.address)).equal(tokens("110"));
