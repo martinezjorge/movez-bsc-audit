@@ -4,7 +4,7 @@
 
 | Contract | Address (mainnet) | Notes |
 |-|-|-|
-| `MOVEZ` | [`0x7FA7dF4996AC59F398476892cfB195eD38543520`](https://testnet.bscscan.com/token/0x012a68f889918186c7798ec6241c52ca03e415ff) | MOVEZ Token |
+| `MOVEZ` | [`TBA`](https://testnet.bscscan.com/token/0x012a68f889918186c7798ec6241c52ca03e415ff) | MOVEZ Token |
 ### Development
 
 Install dependencies via NPM:
